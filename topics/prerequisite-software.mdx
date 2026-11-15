@@ -1,0 +1,35 @@
+---
+title: Prerequisite software
+---
+
+The software that DITA-OT requires depends on the output formats you want to use.
+
+## Software required for core DITA-OT processing
+
+DITA-OT requires the following software applications:
+
+Java Development Kit \(JDK\) or Java Runtime Environment \(JRE\)
+:   DITA-OT 4.4 is designed to run on Java version 17 or later and built and tested with the Open Java Development Kit \(OpenJDK\). Compatible Java distributions are available from multiple sources:
+
+    -   You can download Oracle distributions from [oracle.com/java](https://www.oracle.com/java/technologies/downloads/) under commercial license.
+    -   Eclipse Temurin is the free OpenJDK distribution available from [adoptium.net](https://adoptium.net/temurin/releases/?version=17).
+    -   Free OpenJDK distributions are also provided by [Amazon Corretto](https://aws.amazon.com/corretto/), [Azul Zulu](https://www.azul.com/downloads/), and [Red Hat](https://developers.redhat.com/products/openjdk/download).
+    -   Java versions are also available via package managers such as [Chocolatey](https://chocolatey.org/), [Homebrew](https://brew.sh), or [SDKMAN!](https://sdkman.io/jdks)
+
+    <>
+    
+        This is the *only* prerequisite that you need to install. All other required software is provided in the distribution package, including [Apache Ant™](https://ant.apache.org) 1.10.15, [Saxon](http://saxon.sourceforge.net) 12.9, and [ICU for Java](http://site.icu-project.org/download) 77.1.
+    </>
+    
+    
+
+## Software required for specific transformations
+
+Depending on the type of output that you want to generate, you might need the following applications:
+
+HTML Help Workshop
+:   Microsoft no longer provides the software required for generating Compiled HTML Help \(.chm\) files. You can download an archived copy of the HTML Help Workshop from the Internet Archive’s Wayback Machine at [web.archive.org](http://web.archive.org/web/20160201063255/http://download.microsoft.com/download/0/A/9/0A939EF6-E31C-430F-A3DF-DFAE7960D564/htmlhelp.exe).
+
+XSL-FO processor
+:   Required for generating PDF output. Apache™ FOP **\(Formatting Objects Processor\)** 2.11 is included in the distribution package. You can download other versions from [xmlgraphics.apache.org/fop](https://xmlgraphics.apache.org/fop/download.html). You can also use commercial FO processors such as Antenna House Formatter or RenderX XEP.
+

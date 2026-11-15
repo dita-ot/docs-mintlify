@@ -1,0 +1,75 @@
+---
+title: HTML Help
+---
+
+The htmlhelp transformation generates HTML output, CSS files, and the control files that are needed to produce a Microsoft Compiled HTML Help \(.chm\) file.
+
+In addition to the HTML output and CSS files, this transformation returns the following files, where *mapname* is the name of the root map.
+
+<table class="table-hover"><thead><tr><th align="left" id="d33702e92">
+
+File name
+
+</th><th align="left" id="d33702e95">
+
+Description
+
+</th></tr></thead><tbody><tr><td>
+
+`*mapname*.hhc`
+
+</td><td>
+
+Table of contents
+
+</td></tr><tr><td>
+
+`*mapname*.hhk`
+
+</td><td>
+
+Sorted index
+
+</td></tr><tr><td>
+
+`*mapname*.hhp`
+
+</td><td>
+
+HTML Help project file
+
+</td></tr><tr><td>
+
+`*mapname*.chm`
+
+</td><td>
+
+Compiled HTML Help file
+
+ <>
+
+The compiled file is only generated if the HTML Help Workshop is installed on the build system.
+</>
+
+</td></tr></tbody>
+</table>To run the HTML Help transformation, set the **transtype** parameter to htmlhelp, or pass the **--format**=htmlhelp option to the `dita` command line.
+
+```
+dita --input=input-file --format=htmlhelp
+```
+
+where:
+
+-   *input-file* is the DITA map or DITA file that you want to process.
+
+**Related information**  
+
+
+[Common parameters](../parameters/parameters-base.mdx)
+
+[HTML-based output parameters](../parameters/parameters-base-html.mdx)
+
+[Microsoft Compiled HTML Help parameters](../parameters/parameters-htmlhelp.mdx)
+
+[Handling content outside the map directory](../parameters/generate-copy-outer.mdx)
+

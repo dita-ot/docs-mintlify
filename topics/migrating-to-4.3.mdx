@@ -1,0 +1,36 @@
+---
+title: Migrating to release 4.3
+---
+
+DITA-OT 4.3 includes new `init` and `validate` subcommands that can be used to set up projects from a template and check files for errors before publishing. You can now publish multiple formats on the command line at once, add raw DITA to Markdown files, and publish bookmaps with PDF themes.
+
+<>
+
+This topic provides a summary of changes in DITA-OT 4.3 that may require modifications to custom stylesheets or plug-ins. For more information on changes in this release, see the [DITA-OT 4.3 Release Notes](https://www.dita-ot.org/4.3/release-notes/).
+</>
+
+
+
+## Bookmap support in PDF themes
+
+The PDF theme plug-in `com.elovirta.pdf` has been updated to version 0.8 for better bookmap support. [\#111](https://github.com/jelovirt/pdf-generator/pull/111) You can now style the following bookmap elements in a YAML or JSON theme without building a custom PDF plug-in:
+
+-   `<part>`
+-   `<chapter>`
+-   `<appendix>`
+-   `<index>`
+
+Table of contents \(ToC\) styles have moved to the root `style` key. ToC styling has also been extended for better bookmap support, so you can now specify styles for each level with dedicated keys such as `style-toc-part`, `style-toc-chapter`, etc.
+
+Parts and chapters now also support their own local contents listings, which you can enable by setting the corresponding layout key, for example `chapter-layout: MINITOC`. You can then define styling for each level via keys like `style-part-toc-chapter`, or `style-chapter-toc-1`.
+
+A new `default` theme provides basic styling such as font settings, indentation, and title numbering for a range of commonly used elements. This theme is not intended for publishing as is, but can serve as a foundation for custom themes, and reduce the number of elements you need to style yourself. To use the default theme as the baseline for your own custom theme, add `extends: default` to your theme file. [\#112](https://github.com/jelovirt/pdf-generator/pull/112), [\#114](https://github.com/jelovirt/pdf-generator/pull/114)
+
+## Legacy sample files removed
+
+The legacy Ant samples and garage sample files have been removed from the `docsrc/samples` subfolder of the installation directory. If your workflow relies on these files, you can restore them to the original location with the new `init` subcommand:
+
+```
+dita init samples path/to/dita-ot-dir/docsrc/samples
+```
+

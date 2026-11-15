@@ -1,0 +1,244 @@
+---
+title: Publishing with the dita command
+---
+
+You can publish output using the `dita` command-line tool. Build parameters can be specified on the command line, with `.properties` files, or in project files that define multiple deliverables.
+
+<Steps>
+
+<Step title="At the command-line prompt, enter the following command:
+
+">
+
+<Profile audience={["expert"]}>
+
+```bash
+dita --input=input-file --format=format [options]
+```
+
+
+</Profile>
+
+ <Profile audience={["expert"]}>
+
+where:
+
+-   *input-file* is the DITA map or DITA file that you want to process.
+-   \[*options*\] include the following optional build parameters:
+
+    **--debug**
+    **-d**
+    :   Debug logging prints considerably more additional information. The debug log includes all information from the verbose log, plus details on Java classes, additional Ant properties and overrides, pre-processing filters, parameters, and stages, and the complete build sequence. Debug logging requires additional resources and can slow down the build process, so it should only be enabled when further details are required to diagnose problems.
+
+    **--filter**=*files*
+    :   Specifies filter file\(s\) used to include, exclude, or flag content. Relative paths are resolved against the current directory and internally converted to absolute paths.
+
+        <>
+        
+                        To specify multiple filter files, use the system path separator character to delimit individual file paths \(semicolon ‘`;`’ on Windows, and colon ‘`:`’ on macOS and Linux\) and wrap the value in quotes:
+                
+                         `--filter="filter1.ditaval;filter2.ditaval;filter3.ditaval"`
+                
+                         As of DITA-OT 3.6, the **--filter** option can also be passed multiple times:
+                
+                         `--filter=filter1.ditaval --filter=filter2.ditaval --filter=filter3.ditaval`
+                
+                         DITAVAL files are evaluated in the order specified, so conditions specified in the first file take precedence over matching conditions specified in later files, just as conditions at the start of a DITAVAL document take precedence over matching conditions later in the same document.
+                
+                
+        </>
+        
+        
+
+    **--help**
+    **-h**
+    :   Print a list of available arguments, options, and subcommands.
+
+    **--logfile**=*file*
+    **-l** *file*
+    :   Write logging messages to a file. <>
+
+If processing is successful, nothing is written to the log, so the file will be empty if there are no errors or warnings. To include informational messages in the log, add the [**--verbose**](#verbose) option \(or **-v**\).
+</>
+
+
+
+    **--logger**=*json*
+    :   Generate a structured log in JSON format. Each log message generates a JSON object on its own line. JSON logging disables colored output.
+
+        If log is written to a file with **--logfile**, the log will be generated as a JSON array where each log message is a JSON object as an array item.
+
+    **--no-color**
+    :   By default, DITA-OT prints certain log messages to the console in color. In terminal environments that do not support colored output, the ANSI color escape codes will be shown instead. To deactivate colored output, pass the **--no-color** option to the `dita` command, or set the `TERM=dumb` or `NO_COLOR` environment variables.
+
+    **--output**=*dir*
+    **-o** *dir*
+    :   Specifies the path of the output directory; the path can be absolute or relative to the current directory.
+
+        This option corresponds to the common parameter [output.dir](../parameters/parameters-base.mdx#output.dir).
+
+        By default, the output is written to the `out` subdirectory of the current directory.
+
+    **--parameter**=*value*
+    **-D***parameter*=*value*
+    :   Specify a value for a DITA-OT or Ant build parameter.
+
+    :   The GNU-style **--parameter**=*value* form is only available for parameters that are configured in the plug-in configuration file; the Java-style **-D** form can also be used to specify additional non-configured parameters or set system properties.
+
+    :   Parameters not implemented by the specified transformation type or referenced in a `.properties` file are ignored. <>
+
+If you are building in different environments where the location of the input files is not consistent, set args.input.dir with the `dita` command and reference its value with `${args.input.dir}` in your `.properties` file.
+</>
+
+
+
+    **--propertyfile**=*file*
+    :   Use build parameters defined in the referenced `.properties` file.
+
+    :   Build parameters specified on the command line override those set in the `.properties` file.
+
+    **--repeat**=*N*
+    :   Repeat the transformation *N* number of times.
+
+    :   This option can be used by plug-in developers to measure performance. To run a conversion five times, for example, use **--repeat**=5. The duration of each execution will appear in the console when the final transformation is complete.
+
+        ```
+        $ dita --input=path/to/sample.ditamap --format=html5 \
+               --repeat=5
+        1 11281ms
+        2 4132ms
+        3 3690ms
+        4 4337ms
+        5 3634ms
+        ```
+
+    **--resource**=*file*
+    **-r** *file*
+    :   Specifies resource files.
+
+    :   This argument corresponds to the common parameter [args.resources](../parameters/parameters-base.mdx#args.resources).
+
+    :   Resource files can be used to convert partial documentation sets by processing input with additional information.
+
+    :   For example, to process a single topic file with a map that contains key definitions, use a command like this:
+
+        ```bash
+        dita --input=topic.dita --resource=keys.ditamap --format=html5
+        ```
+
+    :   To convert a chapter map to HTML5 and insert related links from relationship tables in a separate map, use:
+
+        ```bash
+        dita --input=chapter.ditamap --resource=reltables.ditamap --format=html5
+        ```
+
+    **--stacktrace**
+    :   When processing fails on an error condition, Java stack trace is printed for debugging. Only applies when **--verbose** or **--debug** options are set.
+
+    :       **--temp**=*dir*
+    **-t** *dir*
+    :   Specifies the location of the temporary directory.
+
+    :   This option corresponds to the common parameter [dita.temp.dir](../parameters/parameters-base.mdx#dita.temp.dir).
+
+    :   The temporary directory is where DITA-OT writes intermediate files that are generated during the transformation process.
+
+    **--theme**=*file*
+    :   Publish PDF output with a theme configuration file.
+
+    :   For more information, see [PDF themes](pdf-themes.mdx).
+
+    **--verbose**
+    **-v**
+    :   Verbose logging prints additional information to the console, including directory settings, effective values for Ant properties, input/output files, and informational messages to assist in troubleshooting.
+
+
+
+</Profile>
+
+
+
+<Profile audience={["expert"]}>
+
+If processing is successful, nothing is printed in the terminal window. The built output is written to the specified output directory \(by default, in the `out` subdirectory of the current directory\).
+
+
+</Profile>
+
+
+
+
+</Step>
+
+
+</Steps>
+
+ <Profile audience={["expert"]}>
+
+For example, from `*dita-ot-dir*/docsrc`, run:
+
+```
+dita --input=userguide.ditamap --format=html5 \
+     --output=out/docs-html5 \
+     --args.input.dir=/absolute/path/to/dita-ot-dir/docsrc \
+     --propertyfile=properties/docs-build-html5.properties
+```
+
+This builds `userguide.ditamap` to HTML5 output in `out/docs-html5` using the following additional parameters specified in the `properties/docs-build-html5.properties` file:
+
+```
+# Copy the custom .css file to the output directory:
+args.copycss = yes
+
+# Custom .css file used to style output:
+args.css = dita-ot-doc.css
+
+# Location of the copied .css file relative to the output:
+args.csspath = css
+
+# Directory that contains the custom .css file:
+args.cssroot = ${args.input.dir}/resources
+
+# Generate headings for sections within task topics:
+args.gen.task.lbl = YES
+
+# File that contains the running header content:
+args.hdr = ${args.input.dir}/resources/header.xml
+
+# Which related links to include in the output
+args.rellinks = noparent
+
+# Skip Table of Contents file generation:
+html5.toc.generate = no
+
+# Generate a partial navigation TOC in topic pages:
+nav-toc = partial
+```
+
+
+</Profile>
+
+
+
+<Profile audience={["expert"]}>
+
+Usually, you will want to specify a set of reusable build parameters in a `.properties` file, or or create a project file that defines multiple deliverables.
+
+
+</Profile>
+
+
+
+**Related information**  
+
+
+[Arguments and options for the dita command](../parameters/dita-command-arguments.mdx)
+
+[Accessing help for the dita command](dita-command-help.mdx)
+
+[DITA-OT parameters](../parameters/parameters_intro.mdx)
+
+[Internal Ant properties](../parameters/internal-ant-properties.mdx)
+
+[Why "startcmd" is not your friend](https://www.oxygenxml.com/events/2015/dita-ot_day.html#Why_startcmd_is_not_your_friend)
+

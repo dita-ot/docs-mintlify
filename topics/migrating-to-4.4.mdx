@@ -1,0 +1,39 @@
+---
+title: Migrating to release 4.4
+---
+
+DITA-OT 4.4 includes support for additional features in the upcoming DITA 2.0 standard, including the `<keytext>` and `<linktitle>` elements, new class attributes for `<navtitle>`, and new chunking code.
+
+<>
+
+This topic provides a summary of changes in DITA-OT 4.4 that may require modifications to custom stylesheets or plug-ins. For more information on changes in this release, see the [DITA-OT 4.4 Release Notes](https://www.dita-ot.org/4.4/release-notes/).
+</>
+
+
+
+## **Preview** DITA 2.0 updates
+
+In addition to the [DITA 2.0 preview support](../reference/dita-v2-0-support.mdx) provided in DITA-OT 3.5 – 4.3, this release includes updated processing for the latest draft versions of the DITA 2.0 grammar files from OASIS \(as of January 25, 2026\).
+
+<>
+
+Consider updating your documents and/or customizations to take advantage of the new features and prepare for the transition to DITA 2.0.
+</>
+
+
+
+Simple chunking cases in DITA 1.x maps can now be processed using the DITA 2.0 chunking module in compatibility mode. For example, a DITA 1.3 map with `chunk="to-content"` is now processed as if it used the DITA 2.0 `chunk="combine"` action. This refactoring improves reliability by leveraging the newer chunking code, which has fewer bugs than the legacy implementation. Note that this may change how splitting operations generate file names. [\#4600](https://github.com/dita-ot/dita-ot/issues/4600)
+
+The DITAVAL `@outputclass` attribute has been renamed to `@add-outputclass` to match the DITA 2.0 specification. Support for the old attribute name is retained for backwards compatibility, but a DOTA014W warning message is now generated when the deprecated `@outputclass` attribute is used. [\#4635](https://github.com/dita-ot/dita-ot/issues/4635)
+
+DITA-OT now supports the DITA 2.0 `<keytext>` element and implements the updated [DITA 2.0 rules](https://dita-lang.org/dita/archspec/base/processing-keyref-for-text) for generating key variable text. [\#4644](https://github.com/dita-ot/dita-ot/issues/4644)
+
+DITA-OT now supports the DITA 2.0 `<linktitle>` element and recognizes both the DITA 1.3 and DITA 2.0 class attributes for `<navtitle>`. When using a DITA 2.0 root map, the preprocessed map will contain both `<linktext>` \(for DITA 1.3 compatibility\) and `<linktitle>` \(for DITA 2.0\) elements. Plug-ins that handle `<navtitle>` or `<linktext>` may need to be updated to handle these new elements. [\#4734](https://github.com/dita-ot/dita-ot/issues/4734)
+
+<>
+
+Other new or revised features proposed for DITA 2.0 are not yet supported. Additional features will be implemented in future versions of DITA-OT as the specification evolves.
+</>
+
+
+

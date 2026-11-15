@@ -1,0 +1,196 @@
+---
+title: DITA Open Toolkit 4.4 Release Notes
+---
+
+DITA Open Toolkit 4.4 provides a new JSON log option and support for additional features in the upcoming DITA 2.0 standard, including the `<keytext>` and `<linktitle>` elements, new class attributes for `<navtitle>`, and new chunking code.
+
+DITA-OT releases follow [semantic versioning](https://semver.org) guidelines. Version numbers use the *major.minor.patch* syntax, where *major* versions may include incompatible API changes, *minor* versions add functionality in a backwards-compatible manner and *patch* versions are maintenance releases that include backwards-compatible bug fixes.
+
+<>
+
+Download the `dita-ot-4.4.2.zip` package from the project website at [dita-ot.org/download](https://www.dita-ot.org/download).
+</>
+
+
+
+## Requirements: Java 17
+
+DITA-OT 4.4 is designed to run on Java version 17 or later and built and tested with the Open Java Development Kit \(OpenJDK\). Compatible Java distributions are available from multiple sources:
+
+-   You can download Oracle distributions from [oracle.com/java](https://www.oracle.com/java/technologies/downloads/) under commercial license.
+-   Eclipse Temurin is the free OpenJDK distribution available from [adoptium.net](https://adoptium.net/temurin/releases/?version=17).
+-   Free OpenJDK distributions are also provided by [Amazon Corretto](https://aws.amazon.com/corretto/), [Azul Zulu](https://www.azul.com/downloads/), and [Red Hat](https://developers.redhat.com/products/openjdk/download).
+-   Java versions are also available via package managers such as [Chocolatey](https://chocolatey.org/), [Homebrew](https://brew.sh), or [SDKMAN!](https://sdkman.io/jdks)
+
+<>
+
+The Java virtual machine is generally backwards compatible, so class files built with earlier versions should still run correctly with Java 17 and DITA-OT 4.4. If your DITA-OT installation contains plug-ins with custom Java code, you may need to recompile these with Java 17 — but in most cases, this step should not be necessary.
+</>
+
+
+
+## DITA-OT 4.4.2
+
+DITA Open Toolkit 4.4.2 is a maintenance release that includes the following bug fixes.
+
+-   In earlier versions, specializations of the `@props` attribute, such as `@deliveryTarget`, were not cascaded within maps. When a `<topicgroup>` or other map element set a value for one of these attributes, the value was lost when the group was unwrapped during preprocessing, so DITAVAL `passthrough` actions did not produce the expected output for nested topic references. Specializations of `@props` are now cascaded within maps as required by the DITA specification. Cascading from maps to topics is not yet covered by this change. [\#4563](https://github.com/dita-ot/dita-ot/issues/4563), [\#4640](https://github.com/dita-ot/dita-ot/issues/4640)
+-   In DITA-OT 4.4 and 4.4.1, builds failed with an error from `dita-ot:relativize.strip-and-prefix()` when content pulled in with a same-file `@conref` contained a cross-reference to a fragment-only URL, such as `href="#topic-id"`. This pattern worked in DITA-OT 3.x. URL handling for same-file references has been corrected so that these builds succeed and the cross-reference is written to the output as a same-file link. [\#4794](https://github.com/dita-ot/dita-ot/issues/4794), [\#4815](https://github.com/dita-ot/dita-ot/issues/4815)
+-   In earlier versions, DITA-OT filtered and flagged each element using only the profiling attribute values authored on that element. The DITA specification requires the `@audience`, `@platform`, `@product`, `@otherprops`, `@rev`, and `@props` attributes \(and specializations of `@props`\) to cascade, so filtering and flagging now use the cascaded values. With the default `cascade="merge"` setting, a child element is evaluated using its own values together with those of its ancestors, so content that was previously filtered out can now remain in the output. For example, if a parent has `product="x y"`, a child has `product="x"`, and a DITAVAL file excludes `x`, the child is now retained because its effective value includes `y`. To restore the earlier behavior, set `default.cascade = nomerge` in the `configuration.properties` file and remove any `cascade="merge"` settings from source maps, or set `cascade="nomerge"` on individual maps. [\#4807](https://github.com/dita-ot/dita-ot/issues/4807), [\#4808](https://github.com/dita-ot/dita-ot/issues/4808)
+-   The pre-release DITA 2.0 grammar files have been updated to the latest beta files published by OASIS. The `@status` and `@importance` attributes have been added to the `<title>` element in the base grammar and to specializations of `<title>` in the technical content grammar files. In addition, the default values of the `@format` and `@processing-role` attributes on the `<ditavalref>` element are now fixed values. Anyone building or testing content against the DITA 2.0 preview grammar should update to pick up these changes. [\#4816](https://github.com/dita-ot/dita-ot/pull/4816)
+
+For additional information on the issues resolved since the previous release, see the [4.4.2 milestone](https://github.com/dita-ot/dita-ot/issues?q=milestone%3A4.4.2+is%3Aclosed) and [changelog](https://github.com/dita-ot/dita-ot/compare/4.4.1...4.4.2) on GitHub.
+
+## DITA-OT 4.4.1 released August 21, 2026
+
+DITA Open Toolkit 4.4.2 is a maintenance release that includes the following bug fixes.
+
+-   In earlier versions, table entries with a `@scope` attribute set to `row` or `col` were not rendered as header cells \(`<th>`\) in HTML5 output, and the `@scope` value itself was not carried through to the generated markup. The table templates have been updated to promote these entries to header cells and preserve the `@scope` value, improving accessibility for complex tables that rely on explicit header associations. [\#2962](https://github.com/dita-ot/dita-ot/issues/2962), [\#4776](https://github.com/dita-ot/dita-ot/issues/4776)
+-   Several bundled dependencies have been updated to address reported CVEs. Jackson has been updated to version 2.21.4 to address [CVE-2026-54512](https://nvd.nist.gov/vuln/detail/CVE-2026-54512), and Logback and SLF4J have been updated to versions 1.5.37 and 2.0.18 to address [CVE-2026-13006](https://nvd.nist.gov/vuln/detail/CVE-2026-13006). DITA-OT is not known to be affected by either vulnerability, but the dependencies have been updated proactively so they are no longer flagged by CVE scanners. [\#4777](https://github.com/dita-ot/dita-ot/issues/4777), [\#4778](https://github.com/dita-ot/dita-ot/issues/4778), [\#4779](https://github.com/dita-ot/dita-ot/issues/4779), [\#4780](https://github.com/dita-ot/dita-ot/issues/4780)
+-   The pre-release DITA 2.0 grammar files have been updated to the latest draft published by OASIS, which includes fixes and minor updates since the previous update. Anyone building or testing content against the DITA 2.0 preview grammar should update to pick up these changes. [\#4781](https://github.com/dita-ot/dita-ot/issues/4781)
+-   In earlier versions, HTML5 templates in the `related-links:result-group` mode declared a return type of `element()`, even though the underlying logic could return no results. When a topic had no related links to display, this caused a runtime failure during processing. The template signatures in the concept, task, and related-links stylesheets have been corrected to `element()?` to allow an empty result, so processing no longer fails when there are no related links to render. [\#4747](https://github.com/dita-ot/dita-ot/pull/4747)
+
+For additional information on the issues resolved since the previous release, see the [4.4.1 milestone](https://github.com/dita-ot/dita-ot/issues?q=milestone%3A4.4.1+is%3Aclosed) and [changelog](https://github.com/dita-ot/dita-ot/compare/4.4...4.4.1) on GitHub.
+
+## DITA-OT 4.4 released January 31, 2026
+
+DITA Open Toolkit Release 4.4 provides a new JSON log option and support for additional features in the upcoming DITA 2.0 standard, including the `<keytext>` and `<linktitle>` elements, new class attributes for `<navtitle>`, and new chunking code.
+
+### **Preview** DITA 2.0 updates
+
+In addition to the [DITA 2.0 preview support](../reference/dita-v2-0-support.mdx) provided in DITA-OT 3.5 – 4.3, this release includes updated processing for the latest draft versions of the DITA 2.0 grammar files from OASIS.
+
+-   DITA-OT now supports the DITA 2.0 `<keytext>` element and implements the updated [DITA 2.0 rules](https://dita-lang.org/dita/archspec/base/processing-keyref-for-text) for generating key variable text. [\#4644](https://github.com/dita-ot/dita-ot/issues/4644)
+
+    In DITA 2.0, the `<keytext>` element provides a more flexible way to define the text content for key references. When a key is defined with `<keytext>`, this content is used to populate key references that resolve to text.
+
+    Key processing now determines the DITA version of the map that declared each key and applies the appropriate resolution rules. When you combine DITA 1.x and DITA 2.0 maps in a single publication:
+
+    -   Key references to keys defined in DITA 1.x maps use the `<keyword>` element for text resolution \(as in previous versions\).
+    -   Key references to keys defined in DITA 2.0 maps use the `<keytext>` element for text resolution \(following the DITA 2.0 specification\).
+    This approach allows you to gradually migrate content to DITA 2.0 without rewriting existing key definitions. However, mixing DITA versions in a single publication is not generally recommended.
+
+-   Simple chunking cases in DITA 1.x maps can now be processed using the DITA 2.0 chunking module in compatibility mode. For example, a DITA 1.3 map with `chunk="to-content"` is now processed as if it used the DITA 2.0 `chunk="combine"` action. This refactoring improves reliability by leveraging the newer chunking code, which has fewer bugs than the legacy implementation. Note that this may change how splitting operations generate file names. [\#4600](https://github.com/dita-ot/dita-ot/issues/4600)
+
+-   The DITAVAL `@outputclass` attribute has been renamed to `@add-outputclass` to match the DITA 2.0 specification. Support for the old attribute name is retained for backwards compatibility, but a DOTA014W warning message is now generated when the deprecated `@outputclass` attribute is used. [\#4635](https://github.com/dita-ot/dita-ot/issues/4635)
+
+-   DITA 2.0 chunk processing has been improved to support multiple operation tokens. This refactoring work lays the groundwork for future support of select tokens in DITA 2.0 chunk processing. [\#4711](https://github.com/dita-ot/dita-ot/issues/4711)
+
+-   DITA-OT now supports the DITA 2.0 `<linktitle>` element and recognizes both the DITA 1.3 and DITA 2.0 class attributes for `<navtitle>`. When using a DITA 2.0 root map, the preprocessed map will contain both `<linktext>` \(for DITA 1.3 compatibility\) and `<linktitle>` \(for DITA 2.0\) elements. Plug-ins that handle `<navtitle>` or `<linktext>` may need to be updated to handle these new elements. [\#4734](https://github.com/dita-ot/dita-ot/issues/4734)
+
+-   DITA 2.0 grammar files have been updated to the latest draft versions from OASIS \(as of January 25, 2026\). This update removes the `<state>` and `<unknown>` elements from the base grammar, changes the new `@outputclass` attribute in DITAVAL to `@add-outputclass`, and modifies how default values are set for `@title-role` in the Alternative Titles RNG module, for improved editing experience. [\#4744](https://github.com/dita-ot/dita-ot/issues/4744)
+
+    In the technical content grammar, several elements have been removed from the Glossary Entry module:
+
+    -   `<glossAbbreviation>`
+    -   `<glossAlternateFor>`
+    -   `<glossPartOfSpeech>`
+    -   `<glossProperty>`
+    -   `<glossScopeNote>`
+    -   `<glossShortForm>`
+    -   `<glossStatus>`
+
+DITA documents that reference the draft grammar files can be parsed, and where features overlap with DITA 1.3, those features will work as expected.
+
+<>
+
+Other new or revised features proposed for DITA 2.0 are not yet supported. Additional features will be implemented in future versions of DITA-OT as the specification evolves.
+</>
+
+
+
+### JSON logging
+
+A new **--logger=json** option enables structured JSON log output for easier log processing and analysis. [\#4581](https://github.com/dita-ot/dita-ot/issues/4581)
+
+When logging to standard output, each line is a separate JSON object. When logging to a file, the output is formatted as a JSON array. This structured format simplifies integration with log aggregation tools and automated build pipelines that need to parse DITA-OT output programmatically.
+
+### Enhancements and changes
+
+DITA Open Toolkit Release 4.4 includes the following enhancements and changes to existing features:
+
+-   In previous releases, DITAVAL `passthrough` actions in HTML5 transformations supported only simple \(ungrouped\) profiling attribute values. Passthrough support has been extended to profiling attribute groups. When an HTML5 `data-*` passthrough attribute is created for a value in a group, it is named after the group name. Per the DITA 2.0 specification, the `@att` value of a `passthrough` action can match either a profiling attribute name or a group name, and ungrouped values belong to an implicit group named after the attribute. [\#4488](https://github.com/dita-ot/dita-ot/issues/4488), [\#4630](https://github.com/dita-ot/dita-ot/issues/4630)
+-   HTML5 output now also supports passthrough for the `@importance` attribute, allowing this metadata to be passed through to the output HTML for use in downstream processing or styling. [\#4742](https://github.com/dita-ot/dita-ot/issues/4742)
+-   A new **--stacktrace** command-line option has been added to print the full Java stack trace when an error occurs. This option is useful for debugging and troubleshooting, and can help developers and support teams diagnose issues more quickly. By default, stack traces are no longer included in verbose logging output to reduce noise for end users. [\#4579](https://github.com/dita-ot/dita-ot/issues/4579)
+-   The **--deliverable** option can now be specified multiple times on the command line to publish several deliverables from a project file in a single build. This allows you to select specific deliverables without publishing all deliverables defined in the project. [\#4583](https://github.com/dita-ot/dita-ot/issues/4583)
+-   In HTML5 transformations, note bodies are rendered as `<div>` elements with `display: inline` applied to allow single-line note rendering for inline note content. A CSS comment has been added to the default stylesheets to explain this styling choice. [\#4629](https://github.com/dita-ot/dita-ot/issues/4629), [\#4631](https://github.com/dita-ot/dita-ot/issues/4631)
+-   The keyref parser has been refactored to improve code quality and prepare for future feature additions. [\#4637](https://github.com/dita-ot/dita-ot/issues/4637)
+-   Topic ID values are now cached during keyref resolution as a performance optimization. This cache is used for key definitions that point to a file without a topic ID in the fragment identifier. Key definitions that include a topic ID \(such as `href="topic.dita#id"`\) are not affected. [\#4638](https://github.com/dita-ot/dita-ot/issues/4638)
+-   Several bundled dependencies have been upgraded to the latest versions:
+    -   Gradle has been updated to version 9.3. [\#4727](https://github.com/dita-ot/dita-ot/issues/4727), [\#4740](https://github.com/dita-ot/dita-ot/issues/4740)
+    -   JUnit has been updated to version 6.0.2. [\#4740](https://github.com/dita-ot/dita-ot/issues/4740)
+    -   Logback core has been updated to 1.5.19 to address a security vulnerability. [\#4743](https://github.com/dita-ot/dita-ot/issues/4743)
+    -   Saxon has been updated to version 12.9, which includes minor bug fixes. [\#4712](https://github.com/dita-ot/dita-ot/issues/4712), [\#4739](https://github.com/dita-ot/dita-ot/issues/4739)
+    -   XSpec has been upgraded to version 3.2.2, which improves XSLT test capabilities and now reports all failing tests in a file instead of just the first one. [\#4665](https://github.com/dita-ot/dita-ot/issues/4665)
+-   Various internal code improvements have been made for better code quality, test coverage, and maintainability:
+    -   Test class names now consistently use a `Test` suffix [\#4657](https://github.com/dita-ot/dita-ot/issues/4657)
+    -   File stream creation now uses the modern `Files` API [\#4663](https://github.com/dita-ot/dita-ot/issues/4663)
+    -   Unit tests have been added for coderef processing [\#4664](https://github.com/dita-ot/dita-ot/issues/4664)
+    -   Gradle build scripts have been refactored [\#4666](https://github.com/dita-ot/dita-ot/issues/4666)
+    -   Debug output now includes task descriptions for XHTML builds [\#4672](https://github.com/dita-ot/dita-ot/issues/4672)
+    -   Integration test result reporting has been improved [\#4673](https://github.com/dita-ot/dita-ot/issues/4673), [\#4676](https://github.com/dita-ot/dita-ot/issues/4676), [\#4677](https://github.com/dita-ot/dita-ot/issues/4677), [\#4678](https://github.com/dita-ot/dita-ot/issues/4678), [\#4679](https://github.com/dita-ot/dita-ot/issues/4679)
+    -   Preprocessing modules have been refactored for better readability [\#4680](https://github.com/dita-ot/dita-ot/issues/4680), [\#4684](https://github.com/dita-ot/dita-ot/issues/4684)
+    -   Test method naming conventions have been standardized [\#4690](https://github.com/dita-ot/dita-ot/issues/4690)
+    -   General code refactoring for improved quality and performance [\#4718](https://github.com/dita-ot/dita-ot/issues/4718), [\#4724](https://github.com/dita-ot/dita-ot/issues/4724)
+    -   A new directed graph data structure has been added to track dependencies between resources identified by URI. A generic rose tree data structure has also been added to replace earlier ad hoc implementations. [\#4685](https://github.com/dita-ot/dita-ot/issues/4685), [\#4716](https://github.com/dita-ot/dita-ot/issues/4716)
+
+        These internal infrastructure improvements provide a foundation for more sophisticated link and dependency tracking between files and topics. The new `Graph` and `UriGraph` classes enable DITA-OT to model and traverse relationships between resources, which will support future enhancements to content processing and validation.
+
+
+### Bug fixes
+
+DITA Open Toolkit Release 4.4 provides fixes for the following bugs:
+
+-   Earlier versions of DITA-OT threw a `NullPointerException` when using the **--root-chunk-override** option with the DITA 2.0 `combine` value. Chunk processing has been updated to handle this case correctly. [\#4036](https://github.com/dita-ot/dita-ot/issues/4036)
+-   In previous releases, DITAVAL `passthrough` actions in HTML5 transformations were not applied to top-level \(root\) `<topic>` elements, even though they worked correctly for nested topics. The root-topic template has been updated to generate the expected `data-*attname*` passthrough attributes on the HTML5 `<body>` element. [\#4464](https://github.com/dita-ot/dita-ot/issues/4464), [\#4639](https://github.com/dita-ot/dita-ot/issues/4639)
+-   Using the **--root-chunk-override=combine** option with DITA 2.0 content that contained `<xref>` elements caused a `NullPointerException` during link rewriting. Chunk processing has been updated to handle cross-references correctly. [\#4511](https://github.com/dita-ot/dita-ot/issues/4511)
+-   Using the **--root-chunk-override=combine** option with DITA 2.0 content that contained tables caused a `SAXParseException` due to unbound namespace prefixes. The namespace prefix tracking has been fixed to ensure that internal attributes are correctly handled when links are inserted during chunk processing. [\#4513](https://github.com/dita-ot/dita-ot/issues/4513), [\#4738](https://github.com/dita-ot/dita-ot/issues/4738)
+-   The Gradle build configuration has been updated to correctly locate the Node.js executable path on Windows systems. [\#4688](https://github.com/dita-ot/dita-ot/issues/4688)
+-   When using a DITA 2.0 map schema, the `<navtitle>` element within `<topicref>` was ignored, causing navigation entries to be suppressed or flattened in HTML5 output. The transformation now matches both the DITA 1.3 and DITA 2.0 class values for `<navtitle>`. [\#4695](https://github.com/dita-ot/dita-ot/issues/4695)
+-   Combine chunking for the root map in DITA 2.0 has been fixed. [\#4698](https://github.com/dita-ot/dita-ot/issues/4698)
+-   The attribute stack in the force-unique filter and merge-map parser modules was not being correctly maintained, which could cause attributes to be incorrectly applied during processing. The stack management has been fixed to ensure attributes are properly tracked. [\#4705](https://github.com/dita-ot/dita-ot/issues/4705), [\#4706](https://github.com/dita-ot/dita-ot/issues/4706)
+-   In XHTML and Eclipse Help output, trademark symbols in related links caused processing to fail because the `key()` function was called on an intermediate tree without a document node. This fix ports an earlier HTML5 correction to the XHTML transformation, passing the original root node as a tunnel parameter for key lookups. [\#4686](https://github.com/dita-ot/dita-ot/issues/4686), [\#4717](https://github.com/dita-ot/dita-ot/issues/4717)
+-   From the initial public release of DITA-OT, section titles in HTML output have been styled with a CSS `color` property that set text color to black. This creates problems in inverted color schemes like dark mode themes, where section titles did not have sufficient contrast with the background. No other heading levels specify text color, so this version removes the color property to allow themes to modify section title color along with other headings and text. [\#4731](https://github.com/dita-ot/dita-ot/issues/4731)
+-   The PDF2 parameter **outputFile.base** has been marked as deprecated. \(Use **args.output.base** instead.\) [\#4732](https://github.com/dita-ot/dita-ot/issues/4732), [dita-ot/docs\#648](https://github.com/dita-ot/docs/issues/648)
+-   A stale reference to the deprecated **args.logdir** parameter has been removed from test code. This parameter was deprecated in DITA-OT 2.5 and removed in 3.4. [\#4733](https://github.com/dita-ot/dita-ot/issues/4733)
+
+### Contributors
+
+DITA Open Toolkit Release 4.4 includes [code contributions](https://github.com/dita-ot/dita-ot/graphs/contributors) by the following people:
+
+1.  Jarno Elovirta
+2.  Dávid Bertalan
+3.  Roger Sheen
+4.  Robert D. Anderson
+5.  Chris Papademetrious
+6.  Joshua Johnson
+7.  Julien Lacour
+8.  Guillaume Delory
+9.  Gregor Latuske
+
+For the complete list of changes since the previous release, see the [changelog](https://github.com/dita-ot/dita-ot/compare/4.3...4.4) on GitHub.
+
+### Documentation updates
+
+The documentation for DITA Open Toolkit Release 4.4 provides corrections and improvements to existing topics, along with new information in the following topics:
+
+-   [Arguments and options for the dita command](../parameters/dita-command-arguments.mdx)
+-   [DITA 2.0 preview support](../reference/dita-v2-0-support.mdx)
+-   [DITA-OT Day 2025 videos](../topics/dita-ot-day-videos-intro-2025.mdx)
+-   [Logging build information](../topics/logging.mdx)
+-   [Migrating to release 4.4](../topics/migrating-to-4.4.mdx)
+-   [Running the dita command from a Docker image](../topics/using-docker-images.mdx)
+
+For additional information on documentation issues resolved in DITA Open Toolkit Release 4.4, see the [4.4 milestone](https://github.com/dita-ot/docs/issues?q=milestone%3A4.4+is%3Aclosed) in the documentation repository.
+
+DITA Open Toolkit Release 4.4 includes [documentation contributions](https://github.com/dita-ot/docs/graphs/contributors) by the following people:
+
+1.  Roger Sheen
+2.  Jarno Elovirta
+3.  Darrenn Jackson
+4.  Dávid Bertalan
+5.  Jeremy Jeanne
+6.  Lief Erickson
+7.  Stefan Jung
+
+For the complete list of documentation changes since the previous release, see the [changelog](https://github.com/dita-ot/docs/compare/4.3...4.4).
+

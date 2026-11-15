@@ -1,0 +1,86 @@
+---
+title: First build with the dita command
+---
+
+You can publish output using the `dita` command-line tool. Build parameters can be specified on the command line, with `.properties` files, or in project files that define multiple deliverables.
+
+<Profile audience={["novice"]}>
+
+The DITA-OT client is a command-line tool with no graphical user interface. To verify that your installation works correctly, you can build the HTML version of the documentation you are reading now.
+
+
+</Profile>
+
+ <Steps>
+
+<Profile audience={["novice"]}>
+
+<Step title="Open a terminal window by typing the following in the search bar:
+
+">
+
+<table class="multi-platform"><tbody></tbody>
+</table>
+</Step>
+
+
+</Profile>
+
+ <Profile audience={["novice"]}>
+
+<Step title="Change directories to the `docsrc/samples` subfolder of the DITA-OT installation
+          directory:
+
+">
+
+```bash
+cd dita-ot-dir/docsrc/samples
+```
+
+
+</Step>
+
+
+</Profile>
+
+ <Step title="At the command-line prompt, enter the following command:
+
+">
+
+<Profile audience={["novice"]}>
+
+```bash
+dita --project=project-files/html.xml
+```
+
+
+</Profile>
+
+
+
+<Profile audience={["novice"]}>
+
+The HTML version of the documentation is generated in the `docsrc/samples/out` folder.
+
+
+</Profile>
+
+
+
+
+</Step>
+
+
+</Steps>
+
+
+
+<Profile audience={["novice"]}>
+
+Most builds require you to specify more options than are described in this topic. For more information, see [Publishing with the `dita` command](build-using-dita-command.mdx).
+
+
+</Profile>
+
+
+
